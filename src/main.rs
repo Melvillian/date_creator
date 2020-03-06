@@ -1,16 +1,19 @@
-use structopt::StructOpt;
-use structopt::clap::arg_enum;
-use chrono::{Utc, Weekday, Date};
 use chrono::offset::TimeZone;
 use chrono::Datelike;
-use time::Duration as Time_Duration;
+use chrono::{Date, Utc, Weekday};
 use std::time::Duration;
+use structopt::clap::arg_enum;
+use structopt::StructOpt;
+use time::Duration as Time_Duration;
 
 const YEAR: i32 = 2020;
 const ONE_WEEK_IN_SECS: u64 = 60 * 60 * 24 * 7;
 
 #[derive(Debug, StructOpt)]
-#[structopt(name = "date generator", about = "small CLI utility to generate dates for my google docs")]
+#[structopt(
+    name = "date generator",
+    about = "small CLI utility to generate dates for my google docs"
+)]
 struct Opt {
     #[structopt(possible_values = &Month::variants(), case_insensitive = true)]
     month: Month,
@@ -53,7 +56,7 @@ impl Month {
             10 => Month::October,
             11 => Month::November,
             12 => Month::December,
-            otherwise => panic!("bad number for Month: {}", otherwise)
+            otherwise => panic!("bad number for Month: {}", otherwise),
         }
     }
 }
@@ -77,7 +80,6 @@ fn print_dates(opt: Opt) {
     let month_num = opt.month as u32;
 
     for i in (opt.start..opt.end + 1).rev() {
-
         let dt = Utc.ymd(YEAR, month_num, i);
 
         if dt.weekday() == Weekday::Sun {
@@ -103,6 +105,9 @@ fn print_recap_line(dt: Date<Utc>) {
     // Example: Mar 12
     let end = format!("{} {}", this_month, dt.day());
 
-    let range = format!("{} - {}",  begin, end);
-    println!("******************** Recap: {} **************************\n\n", range);
+    let range = format!("{} - {}", begin, end);
+    println!(
+        "******************** Recap: {} **************************\n\n",
+        range
+    );
 }
