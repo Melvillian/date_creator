@@ -69,13 +69,16 @@ fn main() {
 
 /// Prints date separators for Alex's Google Docs Life Journal
 /// # Examples
-///
+/// ```
+/// // $> cargo run March 3 4
+/// // calls
 /// print_dates(opt);
-/// // prints
+/// // which prints:
 /// // ** Wed Mar 4 **
 /// //
 /// //
 /// // ** Tue Mar 3 **
+/// ```
 fn print_dates(opt: Opt) {
     let month_num = opt.month as u32;
 
@@ -91,6 +94,7 @@ fn print_dates(opt: Opt) {
     }
 }
 
+/// Prints the Recap line every Sunday
 fn print_recap_line(dt: Date<Utc>) {
     // figure out which week range this recap should cover
     let one_week = Time_Duration::from_std(Duration::new(ONE_WEEK_IN_SECS, 0)).unwrap();
