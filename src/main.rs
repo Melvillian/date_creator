@@ -1,6 +1,6 @@
 use structopt::StructOpt;
 use structopt::clap::arg_enum;
-use chrono::{Utc, Weekday};
+use chrono::{Utc, Weekday, Date};
 use chrono::offset::TimeZone;
 use chrono::Datelike;
 use time::Duration as Time_Duration;
@@ -81,22 +81,28 @@ fn print_dates(opt: Opt) {
         let dt = Utc.ymd(YEAR, month_num, i);
 
         if dt.weekday() == Weekday::Sun {
-            //
-
-            // figure out which week range this recap should cover
-            let one_week = Time_Duration::from_std(Duration::new(ONE_WEEK_IN_SECS, 0)).unwrap();
-            let one_week_ago = dt.checked_sub_signed(one_week).unwrap();
-            let month_one_week_ago = Month::from_num(one_week_ago.month());
-
-            let begin = format!("{} {}", month_one_week_ago, one_week_ago.day());
-
-            let this_month = Month::from_num(dt.month());
-
-            let end = format!("{} {}", this_month, dt.day());
-
-            let range = format!("{} - {}",  begin, end);
-            println!("******************** Recap: {} **************************\n\n", range);
+            // Sundays are special because I want to use Sunday to revisit the week's events
+            // and write a recap of that week.
+            print_recap_line(dt);
         }
         println!("** {:?} {:?} {} **\n\n", dt.weekday(), opt.month, i);
     }
+}
+
+fn print_recap_line(dt: Date<Utc>) {
+    // figure out which week range this recap should cover
+    let one_week = Time_Duration::from_std(Duration::new(ONE_WEEK_IN_SECS, 0)).unwrap();
+    let one_week_ago = dt.checked_sub_signed(one_week).unwrap();
+    let month_one_week_ago = Month::from_num(one_week_ago.month());
+
+    // Example: Mar 5
+    let begin = format!("{} {}", month_one_week_ago, one_week_ago.day());
+
+    let this_month = Month::from_num(dt.month());
+
+    // Example: Mar 12
+    let end = format!("{} {}", this_month, dt.day());
+
+    let range = format!("{} - {}",  begin, end);
+    println!("******************** Recap: {} **************************\n\n", range);
 }
