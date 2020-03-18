@@ -1,3 +1,5 @@
+//! A small CLI utility to generate dates for my google docs Life Journal
+
 use chrono::offset::TimeZone;
 use chrono::Datelike;
 use chrono::{Date, Utc, Weekday};
