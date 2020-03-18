@@ -1,13 +1,12 @@
 use chrono::offset::TimeZone;
 use chrono::Datelike;
 use chrono::{Date, Utc, Weekday};
-use std::time::Duration;
 use structopt::clap::arg_enum;
 use structopt::StructOpt;
 use time::Duration as Time_Duration;
 
 const YEAR: i32 = 2020;
-const ONE_WEEK_IN_SECS: u64 = 60 * 60 * 24 * 7;
+const BEGINNING_OF_LAST_WEEK: u64 = (60 * 60 * 24 * 6);
 
 #[derive(Debug, StructOpt)]
 #[structopt(
@@ -97,7 +96,7 @@ fn print_dates(opt: Opt) {
 /// Prints the Recap line every Sunday
 fn print_recap_line(dt: Date<Utc>) {
     // figure out which week range this recap should cover
-    let one_week = Time_Duration::from_std(Duration::new(ONE_WEEK_IN_SECS, 0)).unwrap();
+    let one_week = Time_Duration::from_std(std::time::Duration::new(BEGINNING_OF_LAST_WEEK, 0)).unwrap();
     let one_week_ago = dt.checked_sub_signed(one_week).unwrap();
     let month_one_week_ago = Month::from_num(one_week_ago.month());
 
@@ -109,6 +108,7 @@ fn print_recap_line(dt: Date<Utc>) {
     // Example: Mar 12
     let end = format!("{} {}", this_month, dt.day());
 
+    // Example: Mar 5 - Mar 12
     let range = format!("{} - {}", begin, end);
     println!(
         "******************** Recap: {} **************************\n\n",
